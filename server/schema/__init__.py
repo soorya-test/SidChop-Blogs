@@ -1,1 +1,2 @@
-from .posts import PostSchema, PostCreatePayload, PostUpdatePayload
+from .post import PostSchema, PostCreatePayload, PostUpdatePayload
+from .user import UserSchema, UserLoginPayload, UserSignUpPayload
