@@ -8,7 +8,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-import { Mail } from "lucide-react";
 import { cn } from "@/utils/cn";
 import Header from "@/components/header";
 
@@ -37,8 +36,12 @@ export default function Home() {
                 </p>
               </div>
               <div className="3xs:space-x-4 space-y-4 justify-center">
-                <Button>Browse Blogs</Button>
-                <Button variant="outline">Create a Blog</Button>
+                <Link href="/">
+                  <Button>Browse Blogs</Button>
+                </Link>
+                <Link href="/posts/create">
+                  <Button variant="outline">Create a Blog</Button>
+                </Link>
               </div>
             </div>
           </div>

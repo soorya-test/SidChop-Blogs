@@ -21,8 +21,8 @@ export const useLogin = () => {
 
   const onSubmitFunc = async (val: TLogin) => {
     try {
-      const { status } = await loginFunc(val);
-      if (+status !== 200)
+      const res = await loginFunc(val);
+      if (res && +res.status !== 200)
         return toast({
           title: "Sign Up Failed",
           variant: "destructive",
@@ -38,12 +38,13 @@ export const useLogin = () => {
 
       return router.replace("/");
     } catch (err) {
-      return toast({
-        title: "Sign Up Failed",
-        variant: "destructive",
-        description: "Something went wrong",
-        duration: 4000,
-      });
+        return toast({
+          title: "Sign Up Failed",
+          variant: "destructive",
+          description:
+          err instanceof Error ? err.message : "Something went wrong",
+          duration: 4000,
+        });
     }
   };
 

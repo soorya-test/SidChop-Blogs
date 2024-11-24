@@ -1,37 +1,37 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { signUpSchema, TSignUp } from "@/schema/auth";
+import { blogSchema, TBlog } from "@/schema/blog";
 import { useRouter } from "next/navigation";
 import { useToast } from "./use-toast";
-import { signUpFunc } from "@/lib/axios";
+import { createBlogFunc } from "@/lib/axios";
 
-export const useSignUp = () => {
+export const useCreateBlog = () => {
   const {
     register,
     handleSubmit,
     formState: { isSubmitting, errors },
-  } = useForm<TSignUp>({
-    resolver: zodResolver(signUpSchema),
-    defaultValues: { email: "", fullName: "", password: "" },
+  } = useForm<TBlog>({
+    resolver: zodResolver(blogSchema),
+    defaultValues: { title: "", content: "" },
   });
 
   const { toast } = useToast();
   const router = useRouter();
 
-  const onSubmitFunc = async (val: TSignUp) => {
+  const onSubmitFunc = async (val: TBlog) => {
     try {
-      const res = await signUpFunc(val);
+      const res = await createBlogFunc(val);
       if (res && +res.status !== 200)
         return toast({
-          title: "Sign Up Failed",
+          title: "Blog Creation Failed",
           variant: "destructive",
           description: "Something went wrong",
           duration: 4000,
         });
 
       toast({
-        title: "Sign Up Successfull",
+        title: "Blog Created Successfully",
         variant: "default",
         duration: 4000,
       });
@@ -39,7 +39,7 @@ export const useSignUp = () => {
       return router.replace("/");
     } catch (err) {
       return toast({
-        title: "Sign Up Failed",
+        title: "Blog Creation Failed",
         variant: "destructive",
         description:
           err instanceof Error ? err.message : "Something went wrong",
