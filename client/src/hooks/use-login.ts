@@ -26,9 +26,14 @@ export const useLogin = () => {
         return toast({
           title: "Sign Up Failed",
           variant: "destructive",
-          description: "Something went wrong",
+          // @ts-ignore
+          description: res.data.detail ?? "Something went wrong",
           duration: 4000,
         });
+
+      // @ts-ignore
+      const { access_token } = res.data;
+      localStorage.setItem("access_token", access_token);
 
       toast({
         title: "Sign Up Successfull",
@@ -38,13 +43,13 @@ export const useLogin = () => {
 
       return router.replace("/");
     } catch (err) {
-        return toast({
-          title: "Sign Up Failed",
-          variant: "destructive",
-          description:
+      return toast({
+        title: "Sign Up Failed",
+        variant: "destructive",
+        description:
           err instanceof Error ? err.message : "Something went wrong",
-          duration: 4000,
-        });
+        duration: 4000,
+      });
     }
   };
 

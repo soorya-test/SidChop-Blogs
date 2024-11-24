@@ -1,4 +1,3 @@
-import os
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, Response, status
 
@@ -7,12 +6,7 @@ from ..model import UserModel
 from ..schema import UserSignUpPayload, UserLoginPayload
 
 
-def logout(res: Response):
-    res.delete_cookie("authorization")
-    return {"message": "Logout Successfull"}
-
-
-def login(res: Response, db: Session, user: UserLoginPayload):
+def login(db: Session, user: UserLoginPayload):
     db_user = db.query(UserModel).filter(UserModel.email == user.email).first()
     if user is None or not verify_password(
             user.password, db_user.hashed_password):  # type: ignore
@@ -21,17 +15,10 @@ def login(res: Response, db: Session, user: UserLoginPayload):
 
     jwt = create_jwt({"sub": db_user.id})  # type: ignore
 
-    res.set_cookie("authorization",
-                   jwt,
-                   httponly=True,
-                   secure=True,
-                   samesite='none',
-                   max_age=60 * 60 * 24 * 30)
-
-    return {"message": "Login Successfull"}
+    return {"access_token": jwt}
 
 
-def sign_up(res: Response, db: Session, user: UserSignUpPayload):
+def sign_up(db: Session, user: UserSignUpPayload):
     hashed_password = get_password_hash(user.password)
     user_dict = user.model_dump()
     new_user = UserModel(full_name=user_dict["full_name"],
@@ -43,14 +30,7 @@ def sign_up(res: Response, db: Session, user: UserSignUpPayload):
 
     jwt = create_jwt({"sub": new_user.id})
 
-    res.set_cookie("authorization",
-                   jwt,
-                   httponly=True,
-                   secure=True,
-                   samesite="none",
-                   max_age=60 * 60 * 24 * 30)
-
-    return {"message": "Sign Up Successfull"}
+    return {"access_token": jwt}
 
 
 def is_user_authenticated(jwt: str):
