@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
@@ -13,9 +14,10 @@ app = FastAPI()
 
 api_route = APIRouter(prefix="/api")
 
+frontend_url = os.getenv("FRONTEND_URL") or ""
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[frontend_url],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

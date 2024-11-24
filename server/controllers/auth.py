@@ -6,8 +6,6 @@ from ..helpers import verify_password, create_jwt, get_password_hash, validate_j
 from ..model import UserModel
 from ..schema import UserSignUpPayload, UserLoginPayload
 
-FASTAPI_ENVIRONMENT = os.getenv("FASTAPI_ENVIRONMENT") or ""
-
 
 def logout(res: Response):
     res.delete_cookie("authorization")
@@ -26,8 +24,8 @@ def login(res: Response, db: Session, user: UserLoginPayload):
     res.set_cookie("authorization",
                    jwt,
                    httponly=True,
-                   secure=FASTAPI_ENVIRONMENT == "production",
-                   samesite='lax',
+                   secure=True,
+                   samesite='none',
                    max_age=60 * 60 * 24 * 30)
 
     return {"message": "Login Successfull"}
@@ -48,8 +46,8 @@ def sign_up(res: Response, db: Session, user: UserSignUpPayload):
     res.set_cookie("authorization",
                    jwt,
                    httponly=True,
-                   secure=FASTAPI_ENVIRONMENT == "production",
-                   samesite="lax",
+                   secure=True,
+                   samesite="none",
                    max_age=60 * 60 * 24 * 30)
 
     return {"message": "Sign Up Successfull"}
