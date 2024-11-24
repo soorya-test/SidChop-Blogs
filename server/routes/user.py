@@ -1,27 +1,27 @@
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+from typing import List
 
-from ..controllers import login, logout, sign_up
-from ..schema import UserSignUpPayload, UserLoginPayload
+from ..schema.user import UserSchema
+from ..controllers import get_users, delete_user, get_user
+from ..schema import UserSchema
 from ..database import get_db
 
 user_route = APIRouter(prefix="/users")
 
 
-@user_route.post("/sign-up")
-def sign_up_route(response: Response,
-                  user: UserSignUpPayload,
-                  db: Session = Depends(get_db)):
-    return sign_up(response, db, user)
+@user_route.get("/", response_model=List[UserSchema])
+def get_users_route(skip: int = 0,
+                    limit: int = 10,
+                    db: Session = Depends(get_db)):
+    return get_users(db, skip=skip, limit=limit)
 
 
-@user_route.post("/login")
-def login_route(response: Response,
-                user: UserLoginPayload,
-                db: Session = Depends(get_db)):
-    return login(response, db, user)
+@user_route.get("/{user_id}", response_model=UserSchema)
+def get_user_route(user_id: int, db: Session = Depends(get_db)):
+    return get_user(db, user_id)
 
 
-@user_route.get("/logout")
-def logout_route(response: Response):
-    return logout(response)
+@user_route.delete("/{user_id}", response_model=UserSchema)
+def delete_user_route(user_id: int, db: Session = Depends(get_db)):
+    return delete_user(db, user_id)

@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 
-from .user import is_user_authenticated
+from .auth import is_user_authenticated
 from ..model import PostModel
 from ..schema import PostUpdatePayload, PostCreatePayload
 

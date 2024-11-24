@@ -1,59 +1,26 @@
-import os
 from sqlalchemy.orm import Session
-from fastapi import HTTPException, Response, status
+from fastapi import HTTPException, status
 
-from ..helpers import verify_password, create_jwt, get_password_hash, validate_jwt
 from ..model import UserModel
-from ..schema import UserSignUpPayload, UserLoginPayload
-
-FASTAPI_ENVIRONMENT = os.getenv("FASTAPI_ENVIRONMENT") or ""
 
 
-def logout(res: Response):
-    res.delete_cookie("authorization")
-    return {"message": "Logout Successfull"}
+def get_users(db: Session, skip: int = 0, limit: int = 10):
+    return db.query(UserModel).offset(skip).limit(limit).all()
 
 
-def login(res: Response, db: Session, user: UserLoginPayload):
-    db_user = db.query(UserModel).filter(UserModel.email == user.email).first()
-    if user is None or not verify_password(
-            user.password, db_user.hashed_password):  # type: ignore
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED,
-                            "Invalid Credentials")
-
-    jwt = create_jwt({"sub": db_user.id})  # type: ignore
-
-    res.set_cookie("authorization",
-                   jwt,
-                   httponly=True,
-                   secure=FASTAPI_ENVIRONMENT == "production",
-                   samesite='lax',
-                   max_age=60 * 60 * 24 * 30)
-
-    return {"message": "Login Successfull"}
+def get_user(db: Session, user_id: int):
+    user = db.query(UserModel).filter(
+        UserModel.id == user_id).first()  # type: ignore
+    if user is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Post not Found")
+    return user
 
 
-def sign_up(res: Response, db: Session, user: UserSignUpPayload):
-    hashed_password = get_password_hash(user.password)
-    new_user = UserModel(**user.model_dump(), hashed_password=hashed_password)
-    db.add(new_user)
+def delete_user(db: Session, user_id: int):
+    db_user = db.query(UserModel).filter(UserModel.id == user_id).first()
+    if db_user is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Post not Found")
+    db.delete(db_user)
     db.commit()
-    db.refresh(new_user)
 
-    jwt = create_jwt({"sub": new_user.id})
-
-    res.set_cookie("authorization",
-                   jwt,
-                   httponly=True,
-                   secure=FASTAPI_ENVIRONMENT == "production",
-                   samesite="lax",
-                   max_age=60 * 60 * 24 * 30)
-
-    return {"message": "Sign Up Successfull"}
-
-
-def is_user_authenticated(jwt: str):
-    user_id = validate_jwt(jwt)
-    if user_id is None:
-        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "User not Logged in")
-    return user_id
+    return db_user
