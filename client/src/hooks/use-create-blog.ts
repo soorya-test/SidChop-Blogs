@@ -5,6 +5,7 @@ import { blogSchema, TBlog } from "@/schema/blog";
 import { useRouter } from "next/navigation";
 import { useToast } from "./use-toast";
 import { createBlogFunc } from "@/lib/axios";
+import { useToken } from "./use-context";
 
 export const useCreateBlog = () => {
   const {
@@ -18,10 +19,10 @@ export const useCreateBlog = () => {
 
   const { toast } = useToast();
   const router = useRouter();
+  const { token: accessToken } = useToken();
 
   const onSubmitFunc = async (val: TBlog) => {
     try {
-      const accessToken = localStorage.getItem("access_token");
       if (!accessToken)
         return toast({
           title: "Not Logged In",
