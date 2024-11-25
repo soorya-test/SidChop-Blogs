@@ -6,8 +6,11 @@ import { notFound } from "next/navigation";
 
 import { getBlogById, getUserFromId } from "@/lib/axios";
 import { TBlogWithUserName } from "@/types/blog";
-export default function BlogPostPage({ params }: { params: { id: string } }) {
-  // @ts-expect-error
+export default function BlogPostPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const resolvedParams: { id: string } = use(params);
 
   if (!resolvedParams.id) notFound();

@@ -13,9 +13,8 @@ import { TBlogPost } from "@/types/blog";
 export default function BlogPostEditPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  // @ts-expect-error
   const resolvedParams: { id: string } = use(params);
 
   if (!resolvedParams.id) notFound();
