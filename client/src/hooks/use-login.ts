@@ -5,6 +5,7 @@ import { loginSchema, TLogin } from "@/schema/auth";
 import { useRouter } from "next/navigation";
 import { useToast } from "./use-toast";
 import { loginFunc } from "@/lib/axios";
+import { useToken } from "./use-context";
 
 export const useLogin = () => {
   const {
@@ -18,6 +19,8 @@ export const useLogin = () => {
 
   const { toast } = useToast();
   const router = useRouter();
+
+  const { setToken } = useToken();
 
   const onSubmitFunc = async (val: TLogin) => {
     try {
@@ -33,7 +36,7 @@ export const useLogin = () => {
 
       // @ts-expect-error
       const { access_token } = res.data;
-      localStorage.setItem("access_token", access_token);
+      setToken(access_token);
 
       toast({
         title: "Sign Up Successfull",

@@ -8,3 +8,7 @@ export type TBlogPost = {
 };
 
 export type TBlogWithUserName = TBlogPost & { full_name: string };
+
+export type TSummary = {
+  summary: string;
+};

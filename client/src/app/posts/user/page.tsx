@@ -8,6 +8,7 @@ import BlogPostCard from "@/components/blog-post-card";
 import { notFound, useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { LoaderPinwheel } from "lucide-react";
+import { useToken } from "@/hooks/use-context";
 
 export default function UserBlogListingPage() {
   const [posts, setPosts] = useState<TBlogWithUserName[]>([]);
@@ -15,9 +16,10 @@ export default function UserBlogListingPage() {
   const router = useRouter();
   const { toast } = useToast();
 
+  const { token: accessToken } = useToken();
+
   const deleteFn = async (id: number) => {
     try {
-      const accessToken = localStorage.getItem("access_token");
       if (!accessToken)
         return toast({
           title: "Not Logged In",
@@ -53,14 +55,13 @@ export default function UserBlogListingPage() {
 
   const fetchPosts = async () => {
     setLoading(true);
-    const token = localStorage.getItem("access_token");
 
-    if (!token) {
+    if (!accessToken) {
       toast({ title: "Unauthorized accesss", variant: "destructive" });
       return router.replace("/");
     }
 
-    const user = await getUserFromHeader(token);
+    const user = await getUserFromHeader(accessToken);
     if (!user) {
       toast({ title: "Expired Token", variant: "destructive" });
       return router.replace("/auth/login");

@@ -6,13 +6,14 @@ import { LogOut } from "lucide-react";
 
 import { useToast } from "@/hooks/use-toast";
 import { getUserFromHeader } from "@/lib/axios";
+import { useToken } from "@/hooks/use-context";
 
 export default function Header() {
   const [name, setName] = useState("");
   const { toast } = useToast();
+  const { token: accessToken, removeToken } = useToken();
   useEffect(() => {
     const fetchData = async () => {
-      const accessToken = localStorage.getItem("access_token");
       if (!accessToken) return;
       const res = await getUserFromHeader(accessToken);
       if (!res)
@@ -32,12 +33,7 @@ export default function Header() {
       {name && (
         <div className="flex items-center justify-center gap-4">
           <p className="text-black text-sm font-semibold">{name}</p>
-          <button
-            onClick={() => {
-              localStorage.removeItem("access_token");
-              setName("");
-            }}
-          >
+          <button onClick={() => removeToken()}>
             <LogOut color="#000" size={14} />
           </button>
         </div>

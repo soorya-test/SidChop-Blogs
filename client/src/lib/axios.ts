@@ -1,6 +1,6 @@
 import { TLogin, TSignUp } from "@/schema/auth";
 import { TBlog } from "@/schema/blog";
-import { TBlogPost } from "@/types/blog";
+import { TBlogPost, TSummary } from "@/types/blog";
 import { User } from "@/types/user";
 import axios, { AxiosError } from "axios";
 import Error from "next/error";
@@ -115,6 +115,19 @@ export const deleteBlogFunc = async (token: string, id: number) => {
     });
 
     return { status };
+  } catch (err) {
+    if (err instanceof AxiosError)
+      throw new Error(err.response?.data?.detail || "Something went wrong");
+  }
+};
+
+export const getGeneratedSummary = async (content: string) => {
+  try {
+    const { status, data } = await client.post<TSummary>(`/posts/summary`, {
+      content,
+    });
+
+    return { status, data };
   } catch (err) {
     if (err instanceof AxiosError)
       throw new Error(err.response?.data?.detail || "Something went wrong");

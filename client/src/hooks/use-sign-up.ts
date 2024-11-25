@@ -5,6 +5,7 @@ import { signUpSchema, TSignUp } from "@/schema/auth";
 import { useRouter } from "next/navigation";
 import { useToast } from "./use-toast";
 import { signUpFunc } from "@/lib/axios";
+import { useToken } from "./use-context";
 
 export const useSignUp = () => {
   const {
@@ -18,6 +19,7 @@ export const useSignUp = () => {
 
   const { toast } = useToast();
   const router = useRouter();
+  const { setToken } = useToken();
 
   const onSubmitFunc = async (val: TSignUp) => {
     try {
@@ -33,8 +35,8 @@ export const useSignUp = () => {
 
       // @ts-expect-error
       const { access_token } = res.data;
-      localStorage.setItem("access_token", access_token);
-      
+      setToken(access_token);
+
       toast({
         title: "Sign Up Successfull",
         variant: "default",
