@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 
 import { getBlogById, getUserFromId } from "@/lib/axios";
 import { TBlogWithUserName } from "@/types/blog";
+import SummaryGenerator from "@/components/summary-generator";
 export default function BlogPostPage({
   params,
 }: {
@@ -57,6 +58,7 @@ export default function BlogPostPage({
           </p>
         ))}
       </div>
+      <SummaryGenerator content={finalPost.content} />
     </article>
   );
 }

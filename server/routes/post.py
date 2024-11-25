@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, Header, status
 from sqlalchemy.orm import Session
 from typing import Annotated, List
-from ..controllers import update_post, get_posts, create_post, delete_post, get_post
-from ..schema import PostSchema, PostCreatePayload, PostUpdatePayload
+
+from ..controllers import update_post, get_posts, create_post, delete_post, get_post, get_summary
+from ..schema import PostSchema, PostCreatePayload, PostUpdatePayload, BlogSchema
 from ..database import get_db
 
 post_route = APIRouter(prefix="/posts")
@@ -29,6 +30,11 @@ def create_post_route(post: PostCreatePayload,
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Unauthorized")
     token = authorization.replace("Bearer ", "")
     return create_post(db, post=post, jwt=token or "")
+
+
+@post_route.post('/summary')
+def post_summary_route(blog: BlogSchema):
+    return get_summary(blog)
 
 
 @post_route.patch("/{post_id}", response_model=PostSchema)

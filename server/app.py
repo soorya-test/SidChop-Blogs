@@ -5,14 +5,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from .routes import post_route, auth_route, user_route
+from .routes import api_route
 from .database import init_db
 
 init_db()
 
 app = FastAPI()
-
-api_route = APIRouter(prefix="/api")
 
 frontend_url = os.getenv("FRONTEND_URL") or ""
 app.add_middleware(
@@ -22,15 +20,5 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-@api_route.get("/")
-async def read_root():
-    return {"status": True}
-
-
-api_route.include_router(post_route)
-api_route.include_router(auth_route)
-api_route.include_router(user_route)
 
 app.include_router(api_route)
