@@ -13,70 +13,66 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLogin } from "@/hooks/use-login";
-import Header from "@/components/header";
 
 export default function LoginForm() {
   const { errors, handleSubmit, isSubmitting, register } = useLogin();
 
   return (
-    <>
-      <Header />
-      <form
-        onSubmit={handleSubmit}
-        className="w-full h-[90%] flex justify-center items-center"
-      >
-        <Card className="mx-auto max-w-sm">
-          <CardHeader>
-            <CardTitle className="text-2xl mx-auto">
-              Login to Madeline Blogs
-            </CardTitle>
-            <CardDescription>
-              Enter your email below to login to your account
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  {...register("email")}
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                />
-                {errors.email && errors.email.message && (
-                  <span className="text-xs text-red-500">
-                    {errors.email.message}
-                  </span>
-                )}
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  {...register("password")}
-                  id="password"
-                  type="password"
-                  placeholder="**********"
-                />
-                {errors.password && errors.password.message && (
-                  <span className="text-xs text-red-500">
-                    {errors.password.message}
-                  </span>
-                )}
-              </div>
-              <Button disabled={isSubmitting} type="submit" className="w-full">
-                Login
-              </Button>
+    <form
+      onSubmit={handleSubmit}
+      className="w-full h-[90%] flex justify-center items-center"
+    >
+      <Card className="mx-auto max-w-sm">
+        <CardHeader>
+          <CardTitle className="text-2xl mx-auto">
+            Login to Madeline Blogs
+          </CardTitle>
+          <CardDescription>
+            Enter your email below to login to your account
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                {...register("email")}
+                id="email"
+                type="email"
+                placeholder="m@example.com"
+              />
+              {errors.email && errors.email.message && (
+                <span className="text-xs text-red-500">
+                  {errors.email.message}
+                </span>
+              )}
             </div>
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <Link href="/auth/sign-up" className="underline">
-                Sign up
-              </Link>
+            <div className="grid gap-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                {...register("password")}
+                id="password"
+                type="password"
+                placeholder="**********"
+              />
+              {errors.password && errors.password.message && (
+                <span className="text-xs text-red-500">
+                  {errors.password.message}
+                </span>
+              )}
             </div>
-          </CardContent>
-        </Card>
-      </form>
-    </>
+            <Button disabled={isSubmitting} type="submit" className="w-full">
+              Login
+            </Button>
+          </div>
+          <div className="mt-4 text-center text-sm">
+            Don&apos;t have an account?{" "}
+            <Link href="/auth/sign-up" className="underline">
+              Sign up
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    </form>
   );
 }
