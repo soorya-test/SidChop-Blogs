@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Heading1, LoaderPinwheel } from "lucide-react";
+import { LoaderPinwheel } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import {
@@ -73,7 +73,7 @@ export default function BlogListingPage() {
             p.full_name.toLowerCase().includes(searchTerm.toLowerCase())
         )
       );
-  }, [sortBy, searchTerm]);
+  }, [sortBy, searchTerm, rawPosts]);
 
   return (
     <div className="container mx-auto px-4 py-8">

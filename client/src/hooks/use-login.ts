@@ -26,12 +26,12 @@ export const useLogin = () => {
         return toast({
           title: "Sign Up Failed",
           variant: "destructive",
-          // @ts-ignore
+          // @ts-expect-error
           description: res.data.detail ?? "Something went wrong",
           duration: 4000,
         });
 
-      // @ts-ignore
+      // @ts-expect-error
       const { access_token } = res.data;
       localStorage.setItem("access_token", access_token);
 

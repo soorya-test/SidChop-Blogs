@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 import { getBlogById, getUserFromId } from "@/lib/axios";
 import { TBlogWithUserName } from "@/types/blog";
 export default function BlogPostPage({ params }: { params: { id: string } }) {
-  // @ts-ignore
+  // @ts-expect-error
   const resolvedParams: { id: string } = use(params);
 
   if (!resolvedParams.id) notFound();
@@ -31,7 +31,7 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
     };
 
     fetchData();
-  }, []);
+  }, [resolvedParams.id]);
 
   if (!finalPost) return;
 

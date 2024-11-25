@@ -15,7 +15,7 @@ export default function BlogPostEditPage({
 }: {
   params: { id: string };
 }) {
-  // @ts-ignore
+  // @ts-expect-error
   const resolvedParams: { id: string } = use(params);
 
   if (!resolvedParams.id) notFound();
