@@ -5,7 +5,7 @@ export const blogSchema = z.object({
   content: z
     .string()
     .min(1, { message: "This Field is Required" })
-    .min(250, { message: "Content should be minimum of 250 characters" }),
+    .min(50, { message: "Content should be minimum of 50 characters" }),
 });
 
 export type TBlog = z.infer<typeof blogSchema>;

@@ -4,12 +4,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { blogSchema, TBlog } from "@/schema/blog";
 import { useRouter } from "next/navigation";
 import { useToast } from "./use-toast";
-import { createBlogFunc } from "@/lib/axios";
+import { editBlogFunc } from "@/lib/axios";
 
-export const useCreateBlog = () => {
+export const useEditBlog = (id: number) => {
   const {
     register,
     handleSubmit,
+
+    setValue,
     formState: { isSubmitting, errors },
   } = useForm<TBlog>({
     resolver: zodResolver(blogSchema),
@@ -25,21 +27,21 @@ export const useCreateBlog = () => {
       if (!accessToken)
         return toast({
           title: "Not Logged In",
-          description: "You need to login to create Blog Post",
+          description: "You need to login to edit Blog Post",
           variant: "destructive",
         });
 
-      const res = await createBlogFunc(val, accessToken);
+      const res = await editBlogFunc(val, accessToken, id);
       if (res && +res.status !== 200)
         return toast({
-          title: "Blog Creation Failed",
+          title: "Blog Edit Failed",
           variant: "destructive",
           description: "Something went wrong",
           duration: 4000,
         });
 
       toast({
-        title: "Blog Created Successfully",
+        title: "Blog Edit Successfully",
         variant: "default",
         duration: 4000,
       });
@@ -47,7 +49,7 @@ export const useCreateBlog = () => {
       return router.replace("/");
     } catch (err) {
       return toast({
-        title: "Blog Creation Failed",
+        title: "Blog Edit Failed",
         variant: "destructive",
         description:
           err instanceof Error ? err.message : "Something went wrong",
@@ -61,5 +63,6 @@ export const useCreateBlog = () => {
     register,
     isSubmitting,
     errors,
+    setValue,
   };
 };
