@@ -17,7 +17,10 @@ def create_jwt(data: dict) -> str:
 
 def validate_jwt(token: str) -> str | None:
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token,
+                             SECRET_KEY,
+                             algorithms=[ALGORITHM],
+                             options={"verify_sub": False})
         username = payload.get('sub')
         return username
     except:
