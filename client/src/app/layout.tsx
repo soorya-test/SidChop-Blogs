@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="h-screen relative">
+      <body className="h-screen relative overflow-x-hidden">
         <TokenContextProvider>
           <Header />
           {children}
