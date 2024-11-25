@@ -133,3 +133,14 @@ export const getGeneratedSummary = async (content: string) => {
       throw new Error(err.response?.data?.detail || "Something went wrong");
   }
 };
+
+export const checkHealth = async () => {
+  try {
+    const { data } = await client.get<{ status: boolean }>(`/health`);
+
+    return { data };
+  } catch (err) {
+    if (err instanceof AxiosError)
+      throw new Error(err.response?.data?.detail || "Something went wrong");
+  }
+};
