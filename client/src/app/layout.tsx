@@ -15,13 +15,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <TokenContextProvider>
-        <body className="h-screen">
+      <body className="h-screen">
+        <TokenContextProvider>
           <Header />
           {children}
           <Toaster />
-        </body>
-      </TokenContextProvider>
+        </TokenContextProvider>
+      </body>
     </html>
   );
 }

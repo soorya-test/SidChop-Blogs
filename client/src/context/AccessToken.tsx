@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, PropsWithChildren, useState } from "react";
+import { createContext, PropsWithChildren, useEffect, useState } from "react";
 
 export const TokenContext = createContext({
   token: "",
@@ -11,13 +11,22 @@ export const TokenContext = createContext({
 const tokenKey = "access_token" as const;
 
 export default function TokenContextProvider({ children }: PropsWithChildren) {
-  const [token, setTokenState] = useState(localStorage.getItem(tokenKey) ?? "");
+  const [token, setTokenState] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedToken = localStorage.getItem(tokenKey) ?? "";
+      setTokenState(savedToken);
+    }
+  }, []);
 
   const setToken = (token: string) => {
+    if (typeof window === "undefined") return;
     localStorage.setItem(tokenKey, token);
     setTokenState(token);
   };
   const removeToken = () => {
+    if (typeof window === "undefined") return;
     localStorage.removeItem(tokenKey);
     setTokenState("");
   };
