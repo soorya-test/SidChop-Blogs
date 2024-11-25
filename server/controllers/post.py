@@ -32,7 +32,7 @@ def update_post(db: Session, post_id: int, post: PostUpdatePayload, jwt: str):
     db_post = db.query(PostModel).filter(PostModel.id == post_id).first()
     if db_post is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Post not Found")
-    if db_post.author_id == int(user_id):  # type: ignore
+    if db_post.author_id != int(user_id):  # type: ignore
         raise HTTPException(status.HTTP_403_FORBIDDEN, "No Permissions")
     for key, value in post.model_dump().items():
         if value:
@@ -47,7 +47,7 @@ def delete_post(db: Session, post_id: int, jwt: str):
     db_post = db.query(PostModel).filter(PostModel.id == post_id).first()
     if db_post is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Post not Found")
-    if db_post.author_id == int(user_id):  # type: ignore
+    if db_post.author_id != int(user_id):  # type: ignore
         raise HTTPException(status.HTTP_403_FORBIDDEN, "No Permissions")
     db.delete(db_post)
     db.commit()
