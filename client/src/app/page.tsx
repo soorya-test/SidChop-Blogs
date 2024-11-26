@@ -43,7 +43,7 @@ export default function Home() {
         <nav className="sm:ml-auto flex gap-4 sm:gap-6">
           <Link
             className="text-xs hover:underline underline-offset-4"
-            href="https://github.com/soorya-test/Madeline-Blog"
+            href="https://github.com/soorya-u/Madeline-Blog"
             target="_blank"
           >
             Source Code
