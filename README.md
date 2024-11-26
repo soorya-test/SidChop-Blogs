@@ -41,8 +41,8 @@ A modern blogging platform with user authentication that allows logged-in users 
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/yourusername/yourproject.git
-   cd yourproject
+   git clone https://github.com/soorya-u/Madeline-Blog.git
+   cd Madeline-Blog
    ```
 
 2. **Add the required Environment variables for both Client and Server.**
